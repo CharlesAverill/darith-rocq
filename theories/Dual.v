@@ -30,6 +30,8 @@ Module Type DRing.
         zero one add mul sub opp eq.
     Parameter srt : semi_ring_theory
         zero one add mul eq.
+    Parameter zero_neq_one : (0 <> 1)%S.
+    Parameter opp_nonzero : forall x, (-x <> 0 <-> x <> 0)%S.
 End DRing.
 
 Module GDual (DR : DRing).
@@ -131,6 +133,54 @@ Qed.
 Add Ring Ds : D_semi_ring_theory.
 
 Theorem mul_0_l : forall x, 0 * x = 0.
-Proof. now destruct D_semi_ring_theory. Qed.
+Proof.
+    intros. destruct x. unfold D0, mul. simpl.
+    f_equal; ring.
+Qed.
 
+Definition eqb (x y : D) : bool :=
+    (andb (real x =? real y) (du x =? du y))%S.
+Infix "=?" := eqb (at level 100, no associativity) : D_scope.
+
+Theorem eqb_eq : forall (x y : D),
+    reflect (x = y) (x =? y).
+Proof.
+    intros. destruct (x =? y) eqn:E.
+    - apply ReflectT. destruct x, y. unfold eqb in E.
+      simpl in E. destruct (s =? s1)%S eqn:E0, (s0 =? s2)%S eqn:E1;
+        try discriminate.
+      apply (Bool.reflect_iff _ _ (eqb_eq _ _)) in E0.
+      apply (Bool.reflect_iff _ _ (eqb_eq _ _)) in E1.
+      now subst.
+    - apply ReflectF. destruct x, y. unfold eqb in E.
+      simpl in E. destruct (s =? s1)%S eqn:E0, (s0 =? s2)%S eqn:E1;
+        try discriminate; intro Contra; inversion Contra; subst; clear Contra;
+        clear E.
+      + assert (s2 = s2) by reflexivity.
+        apply (Bool.reflect_iff _ _ (eqb_eq _ _)) in H.
+        now rewrite H in E1.
+      + assert (s1 = s1) by reflexivity.
+        apply (Bool.reflect_iff _ _ (eqb_eq _ _)) in H.
+        now rewrite H in E0.
+      + assert (s2 = s2) by reflexivity.
+        apply (Bool.reflect_iff _ _ (eqb_eq _ _)) in H.
+        now rewrite H in E1.
+Qed.
+
+(* The sum of two strict duals need not be a strict dual *)
+Theorem strict_sum_not_strict:
+    exists d1 d2 d3,
+        (real d1 <> 0 /\ real d2 <> 0 /\
+        du d1 <> 0 /\ du d2 <> 0)%S /\
+        d1 + d2 = d3 /\
+        (real d3 = 0 \/ du d3 = 0)%S.
+Proof.
+    exists (1, 1)%S. exists (- one, one)%S.
+    eexists. repeat split; simpl; try symmetry;
+    try apply zero_neq_one.
+    - symmetry. rewrite opp_nonzero.
+      symmetry. apply zero_neq_one.
+    - left. destruct rt. now rewrite Ropp_def.
+Qed.
+      
 End GDual.
