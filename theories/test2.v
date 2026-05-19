@@ -1,3 +1,3 @@
-From PROJECT Require Import test.
+From DArith Require Import test.
 
 Compute x.

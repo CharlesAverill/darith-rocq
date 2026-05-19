@@ -1,27 +1,27 @@
 (lang dune 3.21)
 (using rocq 0.11)
 
-(name PROJECT)
+(name DArith)
 
 (generate_opam_files true)
 
 (source
- (github GH_USERNAME/PROJECT))
+ (github CharlesAverill/DArith))
 
 (authors
- "NAME <EMAIL>")
+ "Charles Averill <charlesaverill20@gmail.com>")
 
 (maintainers
- "NAME <EMAIL>")
+ "Charles Averill <charlesaverill20@gmail.com>")
 
-(license LICENSE)
+(license MIT)
 
-(documentation https://github.com/GH_USERNAME/PROJECT)
+(documentation https://github.com/CharlesAverill/DArith)
 
 (package
- (name PROJECT)
- (synopsis "SYNOPSIS")
- (description "DESCRIPTION")
+ (name DArith)
+ (synopsis "Dual numbers in Rocq")
+ (description "A library of theorems regarding the commutative ring of dual numbers")
  (depends
    (dune (>= 3.21.0))
    (rocq (>= 9.0.0))))
