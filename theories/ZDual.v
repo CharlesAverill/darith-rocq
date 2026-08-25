@@ -1,5 +1,6 @@
-From Stdlib Require Import ZArith Zbool Lia.
-From DArith Require Import Dual.
+From Stdlib Require Import Zbool Lia.
+From Stdlib Require Export ZArith.
+From DArith Require Export Dual.
 Open Scope Z_scope.
 
 Module ZRing <: DRing.

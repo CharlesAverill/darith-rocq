@@ -1,5 +1,5 @@
 (rocq.theory
- (name DArith)
+ (name DExamples)
  (package DArith)
  (modules :standard)
- (theories Stdlib))
+ (theories Stdlib DArith))
