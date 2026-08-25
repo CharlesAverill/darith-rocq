@@ -1,6 +1,7 @@
 # DArith
 
 A library of theorems regarding the commutative ring of dual numbers
+and their application in automatic differentiation.
 
 ## Building
 
