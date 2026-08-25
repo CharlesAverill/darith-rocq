@@ -1,6 +1,5 @@
 (** General dual number ring *)
-From Stdlib Require Import Ring.
-From Stdlib Require Import Ring_theory.
+From Stdlib Require Import Ring Ring_theory Field Field_theory.
 
 Module Type DRing.
     Parameter S : Set.
@@ -34,6 +33,27 @@ Module Type DRing.
     Parameter opp_nonzero : forall x, (-x <> 0 <-> x <> 0)%S.
     Parameter mul_nonzero : forall x y, (x <> 0 -> y <> 0 -> x * y <> 0)%S.
 End DRing.
+
+Module Type DField.
+    Include DRing.
+
+    (* Multiplicative inverse and division *)
+    Parameter inv : S -> S.
+    Parameter div : S -> S -> S.
+    Infix "/" := div (at level 40, left associativity) : S_scope.
+    Notation "/ x" := (inv x) (at level 35, right associativity) : S_scope.
+
+    (* division is multiplication by the inverse *)
+    Parameter div_def : forall x y, (x / y = x * inv y)%S.
+
+    (* guarded inverse law: nonzero elements are invertible *)
+    Parameter mul_inv_r : forall x, (x <> 0)%S -> (x * inv x = 1)%S.
+
+    (* inv is total, defined as x/0 = 0 *)
+    Parameter inv_0 : (inv 0 = 0)%S.
+
+    Parameter ft : field_theory zero one add mul sub opp div inv eq.
+End DField.
 
 Module GDual (DR : DRing).
 Export DR.
