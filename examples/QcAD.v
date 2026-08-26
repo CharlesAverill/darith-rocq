@@ -78,7 +78,6 @@ Example deriv_recip :
     forall a, (a <> 0)%S ->
         du (eval_dual recip (pt a)) = (- Qcinv (a * a))%S.
 Proof.
-    
     intros a Ha.
     assert (Hdef : defined_at recip (fun _ => a)) by (cbn; tauto).
     destruct (eval_dual_correct recip (fun _ => a) (fun _ => 1%S) Hdef) as [_ Hd].
